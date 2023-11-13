@@ -18,7 +18,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/create")
-//    @PreAuthorize("hasAuthority('CUSTOMER')")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) throws Exception {
         OrderDTO createdOrder = orderService.createOrder(orderDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
@@ -39,6 +39,7 @@ public class OrderController {
     }
 
     @GetMapping("/get-all")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Iterable<OrderDTO>> getAllOrders() {
         Iterable<OrderDTO> orders = orderService.getAllOrders();
         return ResponseEntity.ok(orders);
@@ -52,7 +53,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/delete/{orderId}")
-    @PreAuthorize("hasAuthority('INVENTORY_KEEPER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId) {
         orderService.deleteOrder(orderId);
         return ResponseEntity.noContent().build();
